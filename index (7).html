@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北斗七星 — 天道指引，星辰为盟</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #d4a853;
+  --gold-light: #f0d48a;
+  --deep-blue: #0a0e1a;
+  --star-blue: #1a2744;
+  --accent: #4a7dff;
+}
+
+body {
+  background: var(--deep-blue);
+  color: #d0d0d0;
+  font-family: 'Noto Sans SC', sans-serif;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(10,14,26,0.75);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 星空背景 */
+.starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--dur) ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity: var(--o1); }
+  50% { opacity: var(--o2); }
+}
+
+/* 导航 */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  background: rgba(10,14,26,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212,168,83,0.1);
+}
+.nav-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 4px;
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  color: #888;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+  letter-spacing: 1px;
+}
+.nav-links a:hover { color: var(--gold); }
+.btn-join {
+  background: linear-gradient(135deg, var(--gold), #b8862d);
+  color: #0a0e1a;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-join:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,168,83,0.3); }
+
+/* Hero */
+.hero {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 160px 20px 100px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.hero-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.hero-bg-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, rgba(10,14,26,0.4) 0%, rgba(10,14,26,0.85) 70%, rgba(10,14,26,0.95) 100%);
+}
+.hero-constellation {
+  font-size: 80px;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 0 30px rgba(212,168,83,0.4));
+}
+.hero h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 64px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: 12px;
+  text-shadow: 0 0 60px rgba(212,168,83,0.2);
+}
+.hero .subtitle {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  color: var(--gold);
+  margin-bottom: 32px;
+  letter-spacing: 6px;
+}
+.hero .desc {
+  font-size: 16px;
+  color: #777;
+  max-width: 640px;
+  line-height: 2;
+  margin-bottom: 48px;
+}
+.hero-buttons { display: flex; gap: 16px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), #b8862d);
+  color: #0a0e1a;
+  border: none;
+  padding: 16px 44px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 3px;
+  transition: all 0.3s;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(212,168,83,0.3); }
+.btn-ghost {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid rgba(212,168,83,0.3);
+  padding: 16px 44px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 3px;
+  transition: all 0.3s;
+}
+.btn-ghost:hover { background: rgba(212,168,83,0.08); border-color: var(--gold); }
+
+/* 古语 */
+.proverb {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(180deg, transparent, rgba(212,168,83,0.03), transparent);
+}
+.proverb-text {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 28px;
+  color: var(--gold-light);
+  line-height: 2.2;
+  letter-spacing: 4px;
+  opacity: 0.8;
+}
+.proverb-note {
+  font-size: 14px;
+  color: #555;
+  margin-top: 20px;
+  letter-spacing: 2px;
+}
+
+/* 七星 */
+.seven-stars {
+  position: relative;
+  z-index: 1;
+  padding: 80px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.section-title h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 8px;
+  margin-bottom: 12px;
+}
+.section-title p {
+  font-size: 14px;
+  color: #666;
+  letter-spacing: 3px;
+}
+.stars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+.star-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(212,168,83,0.08);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.star-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.star-card:hover { border-color: rgba(212,168,83,0.2); transform: translateY(-4px); }
+.star-card:hover::before { opacity: 1; }
+.star-card .star-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.star-card .star-icon { font-size: 32px; }
+.star-card .star-name {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+}
+.star-card .star-alias {
+  font-size: 12px;
+  color: #666;
+  margin-left: 8px;
+  letter-spacing: 1px;
+}
+.star-card .star-symbol {
+  display: inline-block;
+  background: rgba(212,168,83,0.1);
+  color: var(--gold);
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.star-card .star-meaning {
+  font-size: 15px;
+  color: #aaa;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.star-card .star-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* 文化 */
+.culture {
+  position: relative;
+  z-index: 1;
+  padding: 100px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, transparent, rgba(26,39,68,0.5), transparent);
+}
+.culture-content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.culture-content p {
+  font-size: 16px;
+  color: #888;
+  line-height: 2.2;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+.culture-highlight {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  color: var(--gold-light);
+  line-height: 2;
+  padding: 32px;
+  border-left: 2px solid var(--gold);
+  text-align: left;
+  margin: 40px 0;
+  background: rgba(212,168,83,0.03);
+  border-radius: 0 12px 12px 0;
+}
+
+/* 信任 */
+.trust {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 100px 20px;
+}
+.trust-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.trust-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 40px 24px;
+  transition: all 0.3s;
+}
+.trust-card:hover { border-color: rgba(212,168,83,0.2); }
+.trust-card .trust-icon { font-size: 40px; margin-bottom: 20px; }
+.trust-card h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+.trust-card p { font-size: 13px; color: #777; line-height: 1.8; }
+
+/* CTA */
+.cta {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 100px 20px;
+}
+.cta h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 36px;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: 6px;
+}
+.cta p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+}
+
+/* Footer */
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 40px 20px;
+  border-top: 1px solid rgba(212,168,83,0.08);
+}
+.footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; }
+.footer-links a { color: #555; text-decoration: none; font-size: 13px; letter-spacing: 1px; }
+.footer-links a:hover { color: var(--gold); }
+footer .copy { font-size: 12px; color: #333; letter-spacing: 1px; }
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 36px; letter-spacing: 6px; }
+  .hero .subtitle { font-size: 16px; }
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .stars-grid { grid-template-columns: 1fr; }
+  .trust-cards { grid-template-columns: 1fr; }
+  .proverb-text { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 星空 -->
+<div class="starfield" id="starfield"></div>
+
+<nav>
+  <div class="nav-logo">☆ 北斗七星</div>
+  <div class="nav-links">
+    <a href="#stars">七星</a>
+    <a href="#culture">文化</a>
+    <a href="#trust">信念</a>
+    <a href="#">Twitter</a>
+    <a href="https://t.me/BDQX131419" target="_blank">Telegram</a>
+    <a href="https://qm.qq.com/q/OWdtinejKk" target="_blank">QQ群</a>
+    <button class="btn-join" onclick="window.open('https://t.me/BDQX131419')">加入社区</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://files.catbox.moe/q6wmyz.jpg" alt="北斗七星" />
+    <div class="hero-bg-overlay"></div>
+  </div>
+  <div class="hero-constellation">✦✧✦✧✦✧✦</div>
+  <h1>北斗七星</h1>
+  <div class="subtitle">天道指引 · 星辰为盟</div>
+  <p>北斗七星不仅是夜空中显著的星群，更在中国文化中承载着丰富而深远的象征意义，贯穿天文观测、哲学思想、宗教信仰与社会生活多个层面。</p>
+  <div class="hero-buttons">
+    <button class="btn-primary" onclick="window.open('https://t.me/BDQX131419')">Buy Token</button>
+    <button class="btn-ghost" onclick="window.open('https://qm.qq.com/q/OWdtinejKk')">加入QQ群</button>
+  </div>
+</section>
+
+<section class="proverb">
+  <div class="proverb-text">
+    富在术数，不在劳身<br>
+    利在势局，不在力耕<br>
+    智慧与格局，才是财富的真正密码
+  </div>
+  <div class="proverb-note">— 古训</div>
+</section>
+
+<section class="seven-stars" id="stars">
+  <div class="section-title">
+    <h2>北斗七星</h2>
+    <p>天之七政 · 对应人心七种状态</p>
+  </div>
+  <div class="stars-grid">
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">天枢</span>
+        <span class="star-alias">贪狼星</span>
+      </div>
+      <div class="star-symbol">象征「天」</div>
+      <div class="star-meaning">责任与担当</div>
+      <div class="star-desc">代表领袖精神。天枢为北斗之首，如同社区的核心力量，引领方向，承担使命。</div>
+    </div>
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">天璇</span>
+        <span class="star-alias">巨门星</span>
+      </div>
+      <div class="star-symbol">象征「地」</div>
+      <div class="star-meaning">学习与成长</div>
+      <div class="star-desc">鼓励终身教育。天璇指向北极，象征永恒的求知之心，在变化中寻找不变的真理。</div>
+    </div>
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">天玑</span>
+        <span class="star-alias">禄存星</span>
+      </div>
+      <div class="star-symbol">象征「人」</div>
+      <div class="star-meaning">沟通与联结</div>
+      <div class="star-desc">促进成员互动。天玑居中调和，如同社区中人与人之间的桥梁，连接每一份力量。</div>
+    </div>
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">天权</span>
+        <span class="star-alias">文曲星</span>
+      </div>
+      <div class="star-symbol">象征「时」</div>
+      <div class="star-meaning">公正与规则</div>
+      <div class="star-desc">倡导文明公约。天权掌衡量之道，以公正为基石，建立社区的秩序与信任。</div>
+    </div>
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">玉衡</span>
+        <span class="star-alias">廉贞星</span>
+      </div>
+      <div class="star-symbol">象征「音」</div>
+      <div class="star-meaning">平衡与健康</div>
+      <div class="star-desc">关注身心和谐。玉衡居北斗之中，维持天地平衡，提醒我们在追求中不忘内在安宁。</div>
+    </div>
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">开阳</span>
+        <span class="star-alias">武曲星</span>
+      </div>
+      <div class="star-symbol">象征「律」</div>
+      <div class="star-meaning">勇气与突破</div>
+      <div class="star-desc">激励个人发展。开阳双星并耀，象征突破自我的勇气，在挑战中锻造更强的自己。</div>
+    </div>
+    <div class="star-card">
+      <div class="star-header">
+        <span class="star-icon">⭐</span>
+        <span class="star-name">摇光</span>
+        <span class="star-alias">破军星</span>
+      </div>
+      <div class="star-symbol">象征「星」</div>
+      <div class="star-meaning">梦想与希望</div>
+      <div class="star-desc">点燃未来愿景。摇光为斗柄之末，指引前行的方向，承载着每个人心中的星辰大海。</div>
+    </div>
+  </div>
+</section>
+
+<section class="full-image" style="position:relative;z-index:1;padding:0;max-width:1200px;margin:0 auto;">
+  <img src="https://files.catbox.moe/q6wmyz.jpg" alt="北斗七星" style="width:100%;height:auto;display:block;border-radius:16px;opacity:0.9;" />
+</section>
+
+<section class="culture" id="culture">
+  <div class="section-title">
+    <h2>文化底蕴</h2>
+    <p>以星辰为鉴 · 以文化为根</p>
+  </div>
+  <div class="culture-content">
+    <p>北斗七星在中国传统文化中历来被视为"帝车"，掌管时序运转与命运指引。社区以此为精神图腾，将古老的星辰智慧融入现代社区治理。</p>
+    <div class="culture-highlight">
+      北斗七星不仅是夜空中的导航坐标，更是一套古老而深邃的心理调节系统。古人将七星视为"天之七政"，对应人心中的七种状态，通过观星悟己，可实现情绪疏导与内在平衡。
+    </div>
+    <p>在中国传统文化中，北斗七星不仅是导航工具，更是宇宙秩序的象征。它不仅仅是一个重要的天文标志，也承载着深厚的文化意义。</p>
+    <p>优秀社区一定是有文化、有底蕴的，是一群相互理解、相互学习、互相信任的人组成的。</p>
+  </div>
+</section>
+
+<section class="trust" id="trust">
+  <div class="section-title">
+    <h2>社区信念</h2>
+    <p>信任是通往成功的基本元素</p>
+  </div>
+  <div class="trust-cards">
+    <div class="trust-card">
+      <div class="trust-icon">🤝</div>
+      <h3>信任</h3>
+      <p>信任是沟通最基本的桥梁，是通往成功的基本元素，同样也是最难拥有的。</p>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">📖</div>
+      <h3>学习</h3>
+      <p>相互学习，共同成长。在星辰的指引下，每个人都能找到属于自己的光芒。</p>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">🌟</div>
+      <h3>共识</h3>
+      <p>七星同辉，众志成城。社区的力量源于每一位成员的信念与坚持。</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>加入北斗</h2>
+  <p>与星辰同行，与智者为伍</p>
+  <button class="btn-primary" onclick="window.open('https://t.me/BDQX131419')">加入社区</button>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="#">Twitter</a>
+    <a href="https://t.me/BDQX131419" target="_blank">Telegram</a>
+    <a href="https://qm.qq.com/q/OWdtinejKk" target="_blank">QQ群</a>
+    <a href="#">Contract</a>
+    <a href="#">DexScreener</a>
+  </div>
+  <div class="copy">© 2026 北斗七星社区 · 天道指引，星辰为盟</div>
+</footer>
+
+<script>
+// 生成星空
+const sf = document.getElementById('starfield');
+for (let i = 0; i < 200; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*100}%; left:${Math.random()*100}%;
+    --dur:${Math.random()*4+2}s;
+    --o1:${Math.random()*0.3+0.1};
+    --o2:${Math.random()*0.7+0.3};
+  `;
+  sf.appendChild(s);
+}
+</script>
+
+</body>
+</html>
